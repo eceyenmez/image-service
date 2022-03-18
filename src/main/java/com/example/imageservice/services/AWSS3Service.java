@@ -42,13 +42,13 @@ public class AWSS3Service {
     {
         String awsBucketName = "test";
 
-        //mocking s3 result start---
+        //---mocking s3 result start--- delete this part and to test
         Random rd = new Random(); // creating Random object
         System.out.println("random generated boolean: "+rd.nextBoolean());
         return rd.nextBoolean();
         //mocking s3 result end---
 
-        //return amazonS3.doesObjectExist(awsBucketName, objectName);
+        //return amazonS3.doesObjectExist(awsBucketName, objectName); //uncomment this
     }
 
     public S3Object downloadFile(String s3FilePath) {
