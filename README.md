@@ -1,2 +1,2 @@
 # image-service
-hello world
+s3 bucket integration for spring boot
