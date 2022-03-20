@@ -23,14 +23,10 @@ public class ImageController {
 
     @GetMapping(value = {"/show/{predefinedTypeName}/", "/show/{predefinedTypeName}/{seoName}/"})
     public ResponseEntity<PathResponse> getImage(@PathVariable(name = "predefinedTypeName") @ImageTypeValidation String typeName,
-                          @PathVariable(required = false, name = "seoName") String seoName,
-                          @RequestParam(required = true) String reference) throws IOException {
+                                                 @PathVariable(required = false, name = "seoName") String seoName,
+                                                 @RequestParam(required = true) String reference) throws IOException {
 
         String path = imageService.getImage(PredefinedImageType.valueOf(typeName.toUpperCase()), reference);
-
-        if(path.equals("")){
-            return new ResponseEntity<PathResponse>(new PathResponse(path),HttpStatus.NOT_FOUND);
-        }
 
         return new ResponseEntity<PathResponse>(new PathResponse(path),HttpStatus.OK);
 
