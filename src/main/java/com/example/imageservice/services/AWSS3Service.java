@@ -27,7 +27,7 @@ public class AWSS3Service {
     @Autowired
     protected TransferManager transferManager;
 
-    @Value("dummyBucketName")
+    @Value("${aws.s3.bucket}")
     protected String bucketName;
 
     protected Logger logger = LoggerFactory.getLogger(AWSS3Service.class);
@@ -40,15 +40,13 @@ public class AWSS3Service {
 
     public boolean doesObjectExist(String objectName)
     {
-        String awsBucketName = "test";
-
         //---mocking s3 result start--- delete this part and to test
         Random rd = new Random(); // creating Random object
         System.out.println("random generated boolean: "+rd.nextBoolean());
         return rd.nextBoolean();
         //mocking s3 result end---
 
-        //return amazonS3.doesObjectExist(awsBucketName, objectName); //uncomment this
+        //return amazonS3.doesObjectExist(bucketName, objectName); //uncomment this
     }
 
     public S3Object downloadFile(String s3FilePath) {

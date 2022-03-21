@@ -1,6 +1,5 @@
 package com.example.imageservice.config;
 
-import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -10,11 +9,10 @@ import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-
-import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -27,13 +25,25 @@ public class AWSS3Configuration {
 
     private Logger logger = LoggerFactory.getLogger(AWSS3Configuration.class);
 
+    @Value("${aws-accesskey}")
+    private String accessKey;
+
+    @Value("${aws-secretkey}")
+    private String secretKey;
+
+    @Value("${aws.s3.region}")
+    private String region;
+
+    @Value("${aws.s3.threadPool.max}")
+    private int maxThreadCount;
+
     @Primary
     @Bean
     public AmazonS3 s3client() {
-        AWSCredentials awsCredentials = new BasicAWSCredentials("test", "awsSecretKey");
+        AWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
         return AmazonS3ClientBuilder
                 .standard()
-                .withRegion("eu-central-1")
+                .withRegion(region)
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
     }
@@ -65,6 +75,6 @@ public class AWSS3Configuration {
                 return thread;
             }
         };
-        return (ThreadPoolExecutor) Executors.newFixedThreadPool(20, threadFactory);
+        return (ThreadPoolExecutor) Executors.newFixedThreadPool(maxThreadCount, threadFactory);
     }
 }

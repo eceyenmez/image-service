@@ -4,6 +4,7 @@ import com.example.imageservice.annotation.ImageTypeValidation;
 import com.example.imageservice.model.PathResponse;
 import com.example.imageservice.model.PredefinedImageType;
 import com.example.imageservice.services.ImageService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,6 +15,9 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/image")
 public class ImageController {
+
+    @Value("${aws-s3-endpoint}")
+    private String awsS3Endpoint;
 
     final ImageService imageService;
 
@@ -28,7 +32,7 @@ public class ImageController {
 
         String path = imageService.getImage(PredefinedImageType.valueOf(typeName.toUpperCase()), reference);
 
-        return new ResponseEntity<PathResponse>(new PathResponse(path),HttpStatus.OK);
+        return new ResponseEntity<PathResponse>(new PathResponse(awsS3Endpoint.concat(path)),HttpStatus.OK);
 
     }
 
